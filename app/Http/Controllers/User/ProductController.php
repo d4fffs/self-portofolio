@@ -28,6 +28,7 @@ class ProductController extends Controller
         $product->stok -= $quantity;
         $product->save();
 
-        return redirect()->back()->with('success', 'Produk berhasil dibeli. Terima kasih!');
+        // Redirect ke dashboard dengan pesan sukses
+        return redirect()->route('dashboard')->with('success', 'Produk berhasil dibeli. Terima kasih!');
     }
 }

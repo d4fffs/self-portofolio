@@ -68,7 +68,6 @@ class ProductController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'detail' => 'required|string|max:255',
-            'jenis' => 'required|string|max:255',
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

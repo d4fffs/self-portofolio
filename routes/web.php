@@ -9,43 +9,47 @@ use App\Http\Controllers\User\ProductController as UserProductController;
 // -----------------------------
 // 📢 Public Route
 // -----------------------------
-Route::get('/', fn() => view('welcome'));
+
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::view('/navbar', 'navbar.barang')->name('navbarang');
 
 // -----------------------------
 // 👤 User Route (login & verified)
 // -----------------------------
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [ProductController::class, 'publicView'])->name('dashboard');
 
-    // Profile
+    // Profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Produk detail untuk user
-    Route::get('/products/{id}', [UserProductController::class, 'show'])->name('user.products.show');
-    Route::post('/products/{product}/purchase', [UserProductController::class, 'purchase'])->name('user.products.purchase');
-
 });
 
 // -----------------------------
 // 🛡️ Admin Route (login & isAdmin)
+Route::get('/products/{id}', [UserProductController::class, 'show'])->name('user.products.show');
+Route::post('/products/{product}/purchase', [UserProductController::class, 'purchase'])->name('user.products.purchase');
 // -----------------------------
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardAdmin::class, 'index'])->name('dashboard');
+
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    // Admin Dashboard
+    Route::get('/dashboard', [DashboardAdmin::class, 'index'])->name('admin.dashboard');
 
     // Product Management
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-    Route::post('/products/save', [ProductController::class, 'save'])->name('products.save');
-    Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
-    Route::put('/products/edit/{id}', [ProductController::class, 'update'])->name('products.update');
-    Route::delete('/products/delete/{id}', [ProductController::class, 'delete'])->name('products.delete');
+    Route::get('/products', [ProductController::class, 'index'])->name('admin/products');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('admin/products/create');
+    Route::post('/products/save', [ProductController::class, 'save'])->name('admin/products/save');
+    Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('admin/products/edit');
+    Route::put('/products/edit/{id}', [ProductController::class, 'update'])->name('admin/products/update');
+    Route::delete('admin/products/delete/{id}', [ProductController::class, 'delete'])->name('admin/products/delete');
+    Route::get('/user/products/{id}', [UserProductController::class, 'show'])->name('user/show');
 });
 
 // -----------------------------
-// 🔐 Auth Scaffolding
+// 🔐 Auth Scaffolding (Fortify / Breeze / Jetstream)
 // -----------------------------
 require __DIR__ . '/auth.php';

@@ -14,9 +14,6 @@
             <h3 class="text-xl font-bold mb-1 group-hover:text-yellow-400 transition">
                 {{ $product->name }}
             </h3>
-            <p class="group-hover:text-gray-200 transition">
-                {{ $product->detail }}
-            </p>
         </div>
     </div>
 </a>
