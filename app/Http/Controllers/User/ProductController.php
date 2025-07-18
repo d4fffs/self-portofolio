@@ -25,9 +25,9 @@ class ProductController extends Controller
             return redirect()->back()->with('error', 'Jumlah melebihi stok yang tersedia.');
         }
 
-        // Kurangi stok dan tambahkan jumlah terjual
+       
         $product->stok -= $quantity;
-        $product->terjual += $quantity; // Tambahan: mencatat penjualan
+        $product->terjual += $quantity; 
         $product->save();
 
         return redirect()->route('dashboard')->with('success', 'Produk berhasil dibeli. Terima kasih!');
