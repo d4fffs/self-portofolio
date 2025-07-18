@@ -35,7 +35,14 @@
                                 <td class="px-6 py-4">{{ $product->name }}</td>
                                 <td class="px-6 py-4">{{ $product->detail }}</td>
                                 <td class="px-6 py-4">Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
-                                <td class="px-6 py-4">{{ $product->stok }}</td>
+                                <td class="px-6 py-4">
+                                    @if ($product->stok == 0)
+                                        <span class="text-red-500 font-semibold">Habis</span>
+                                    @else
+                                        {{ $product->stok }}
+                                    @endif
+                                </td>
+
                                 <td class="px-6 py-4">
                                     @if ($product->image)
                                         <img src="{{ asset('img/products/' . $product->image) }}"

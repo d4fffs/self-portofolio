@@ -6,19 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Menambahkan kolom image dan total_order.
-     */
     public function up(): void
     {
         Schema::table('products', function (Blueprint $table) {
+            $table->integer('stok_awal')->nullable()->after('stok');
         });
     }
 
     public function down(): void
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('image');
+            $table->dropColumn('stok_awal');
         });
     }
 };

@@ -26,6 +26,7 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'jenis' => 'required|string|max:255',
             'detail' => 'required|string|max:255',
             'harga' => 'required|numeric',
             'stok' => 'required|integer',
@@ -40,17 +41,16 @@ class ProductController extends Controller
             $validated['image'] = $filename;
         }
 
+        // Set stok_awal sama dengan stok saat pertama kali dibuat
+        $validated['stok_awal'] = $validated['stok'];
+
         $product = Product::create($validated);
 
-        if ($product) {
-            return redirect()->route('admin/products')->with('success', 'Produk berhasil ditambahkan!');
-        }
-
-        return redirect()->route('admin/products')->with('error', 'Terjadi kesalahan saat menambahkan produk.');
+        return redirect()->route('admin/products')->with(
+            $product ? 'success' : 'error',
+            $product ? 'Produk berhasil ditambahkan!' : 'Terjadi kesalahan saat menambahkan produk.'
+        );
     }
-
-
-
 
 
     // Form edit produk
@@ -69,7 +69,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'detail' => 'required|string|max:255',
             'harga' => 'required|numeric',
-            'stok' => 'required|integer',
+            'stok' => 'required|integer|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -79,10 +79,15 @@ class ProductController extends Controller
             $validated['image'] = $imageName;
         }
 
+        // Gunakan nilai input stok sebagai stok_awal juga
+        $validated['stok_awal'] = $validated['stok'];
+
         $product->update($validated);
 
         return redirect()->route('admin/products')->with('success', 'Berhasil mengupdate produk!');
     }
+
+
 
 
 
