@@ -18,7 +18,8 @@
             <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
                 <h3 class="text-xl font-semibold mb-4">Beli Produk</h3>
 
-                <form method="POST" action="{{ route('user.products.purchase', $product->id) }}" id="purchase-form" novalidate>
+                <form method="POST" action="{{ route('user.products.purchase', $product->id) }}" id="purchase-form"
+                    novalidate>
                     @csrf
 
                     @if ($product->stok < 50)
@@ -48,12 +49,14 @@
         const form = document.getElementById('purchase-form');
         const quantityInput = document.getElementById('quantity');
         const maxStock = {{ $product->stok }};
+        const productName = @json($product->name);
+        const productPrice = {{ $product->harga }};
 
-        form.addEventListener('submit', function (e) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // selalu prevent terlebih dahulu
             const qty = parseInt(quantityInput.value);
 
             if (isNaN(qty) || qty < 1) {
-                e.preventDefault();
                 Swal.fire({
                     icon: 'warning',
                     title: 'Jumlah tidak valid',
@@ -63,13 +66,39 @@
             }
 
             if (qty > maxStock) {
-                e.preventDefault();
                 Swal.fire({
                     icon: 'error',
                     title: 'Jumlah melebihi stok',
                     text: `Stok tersedia hanya ${maxStock} unit.`,
                 });
+                return;
             }
+
+            // Hitung total harga
+            const totalHarga = qty * productPrice;
+            const formatter = new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            });
+
+            Swal.fire({
+                title: 'Konfirmasi Pembelian',
+                html: `
+                <p><strong>Nama Produk:</strong> ${productName}</p>
+                <p><strong>Jumlah:</strong> ${qty}</p>
+                <p><strong>Total Harga:</strong> ${formatter.format(totalHarga)}</p>
+            `,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, beli sekarang',
+                cancelButtonText: 'Batal',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit(); // submit jika user yakin
+                }
+            });
         });
     </script>
+
 </x-app-layout>

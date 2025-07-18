@@ -14,7 +14,7 @@
             {{ $greeting }}, {{ Auth::user()->name }}
         </h1>
 
-        <h2 class="text-3xl font-bold text-white mb-8">Semua Produk</h2>
+        <h2 class="text-3xl font-bold text-white mb-8">Pilih Rasya Anda</h2>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
             @forelse ($products as $product)

@@ -33,12 +33,9 @@
                 ];
 
                 $icons = [
-                    'cube' =>
-                        '<path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4a2 2 0 001-1.73z" />',
-                    'archive' =>
-                        '<path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4z" /><path d="M5 8h14v10a2 2 0 01-2 2H7a2 2 0 01-2-2V8z" />',
-                    'cash' =>
-                        '<path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v2h14z" /><path d="M3 9v6a2 2 0 002 2h10a2 2 0 002-2V9H3zm5 3h.01" />',
+                    'cube' => '<path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4a2 2 0 001-1.73z" />',
+                    'archive' => '<path d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4z" /><path d="M5 8h14v10a2 2 0 01-2 2H7a2 2 0 01-2-2V8z" />',
+                    'cash' => '<path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v2h14z" /><path d="M3 9v6a2 2 0 002 2h10a2 2 0 002-2V9H3zm5 3h.01" />',
                     'x-circle' => '<path d="M12 2a10 10 0 100 20 10 10 0 000-20z" /><path d="M15 9l-6 6m0-6l6 6" />',
                 ];
             @endphp
@@ -59,12 +56,22 @@
             @endforeach
         </div>
 
-        {{-- Chart --}}
-        <div class="bg-gray-800 p-6 rounded-xl shadow">
-            <h2 class="text-lg md:text-xl font-semibold text-white mb-4 text-center md:text-left">Visualisasi Stok
-                Produk</h2>
-            <div class="overflow-x-auto">
-                <canvas id="stokChart" class="w-full max-w-full" style="min-height: 300px;"></canvas>
+        {{-- Dua Chart Bersebelahan --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {{-- Chart Stok Produk --}}
+            <div class="bg-gray-800 p-6 rounded-xl shadow h-full">
+                <h2 class="text-lg md:text-xl font-semibold text-white mb-4 text-center md:text-left">Stok Produk</h2>
+                <div class="overflow-x-auto">
+                    <canvas id="stokChart" class="w-full" style="min-height: 300px;"></canvas>
+                </div>
+            </div>
+
+            {{-- Chart Produk Terjual --}}
+            <div class="bg-gray-800 p-6 rounded-xl shadow h-full">
+                <h2 class="text-lg md:text-xl font-semibold text-white mb-4 text-center md:text-left">Produk Terjual</h2>
+                <div class="overflow-x-auto">
+                    <canvas id="terjualChart" class="w-full" style="min-height: 300px;"></canvas>
+                </div>
             </div>
         </div>
     </section>
@@ -72,8 +79,9 @@
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            const ctx = document.getElementById('stokChart');
-            const stokChart = new Chart(ctx, {
+            // Chart Stok Produk
+            const ctxStok = document.getElementById('stokChart');
+            const stokChart = new Chart(ctxStok, {
                 type: 'bar',
                 data: {
                     labels: {!! json_encode($produkLabels) !!},
@@ -91,28 +99,47 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            ticks: {
-                                precision: 0,
-                                color: '#ffffff'
-                            },
-                            grid: {
-                                color: '#444'
-                            }
+                            ticks: { precision: 0, color: '#ffffff' },
+                            grid: { color: '#444' }
                         },
                         x: {
-                            ticks: {
-                                color: '#ffffff'
-                            },
-                            grid: {
-                                color: '#444'
-                            }
+                            ticks: { color: '#ffffff' },
+                            grid: { color: '#444' }
                         }
                     },
-                    plugins: {
-                        legend: {
-                            display: false
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            // Chart Produk Terjual
+            const ctxTerjual = document.getElementById('terjualChart');
+            const terjualChart = new Chart(ctxTerjual, {
+                type: 'bar',
+                data: {
+                    labels: {!! json_encode($produkLabels) !!},
+                    datasets: [{
+                        label: 'Produk Terjual',
+                        data: {!! json_encode($produkTerjual) !!},
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                        borderRadius: 6,
+                        barThickness: 28
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { precision: 0, color: '#ffffff' },
+                            grid: { color: '#444' }
+                        },
+                        x: {
+                            ticks: { color: '#ffffff' },
+                            grid: { color: '#444' }
                         }
-                    }
+                    },
+                    plugins: { legend: { display: false } }
                 }
             });
         </script>

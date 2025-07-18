@@ -25,6 +25,7 @@ class DashboardAdmin extends Controller
         // Data untuk chart
         $produkLabels = $products->pluck('name');
         $produkStok = $products->pluck('stok');
+        $produkTerjual = $products->pluck('terjual');
 
         return view('admin.dashboard', compact(
             'products',
@@ -33,7 +34,8 @@ class DashboardAdmin extends Controller
             'produkKosong',
             'totalPendapatan',
             'produkLabels',
-            'produkStok'
+            'produkStok',
+            'produkTerjual'
         ));
     }
 }

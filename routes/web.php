@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DashboardAdmin;
+use App\Http\Controllers\HistoriController;
 use App\Http\Controllers\User\ProductController as UserProductController;
 
 // -----------------------------
@@ -38,6 +39,9 @@ Route::post('/products/{product}/purchase', [UserProductController::class, 'purc
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // Admin Dashboard
     Route::get('/dashboard', [DashboardAdmin::class, 'index'])->name('admin.dashboard');
+
+    Route::get('/histori', [HistoriController::class, 'index'])->name('histori');
+
 
     // Product Management
     Route::get('/products', [ProductController::class, 'index'])->name('admin/products');
