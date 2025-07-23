@@ -53,6 +53,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/user/products/{id}', [UserProductController::class, 'show'])->name('user/show');
 });
 
+
+//History Management
+Route::get('/admin/product/histori', [HistoriController::class, 'index'])->name('admin.product.histori');
+Route::delete('/admin/product/histori/{id}', [HistoriController::class, 'destroy'])->name('admin.product.histori.destroy');
+
+//Undefined route
+Route::get('/test404', function () {
+    abort(404);
+});
+
+
 // -----------------------------
 // 🔐 Auth Scaffolding (Fortify / Breeze / Jetstream)
 // -----------------------------

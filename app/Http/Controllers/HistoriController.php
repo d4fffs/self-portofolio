@@ -16,4 +16,11 @@ class HistoriController extends Controller
 
         return view('admin.product.histori', compact('orders'));
     }
+    public function destroy($id)
+    {
+        $order = Order::findOrFail($id);
+        $order->delete();
+
+        return redirect()->route('admin.product.histori')->with('success', 'Histori berhasil dihapus.');
+    }
 }

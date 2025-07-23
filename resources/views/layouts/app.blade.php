@@ -8,20 +8,17 @@
     <title>{{ config('app.name', 'Fast Diamond') }}</title>
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Vite -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('styles')
 </head>
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen font-sans">
     <div class="flex">
-        {{-- Sidebar --}}
         @include('layouts.navigation')
 
-        {{-- Konten utama --}}
         <main class="flex-1 p-6 overflow-y-auto">
             {{ $slot }}
         </main>
